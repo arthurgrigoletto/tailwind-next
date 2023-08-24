@@ -5,7 +5,13 @@ import { useFileInput } from './Root'
 import { useMemo } from 'react'
 
 export function ImagePreview() {
-  const { files } = useFileInput()
+  const { multiple, files } = useFileInput()
+
+  if (multiple) {
+    throw new Error(
+      'Cannot use <ImagePreview /> component alongside multiple file upload input.',
+    )
+  }
 
   const previewURL = useMemo(() => {
     if (files.length === 0) {
@@ -21,13 +27,13 @@ export function ImagePreview() {
         <User className="h-8 w-8 text-violet-500" />
       </div>
     )
+  } else {
+    return (
+      <img
+        className="h-16 w-16 rounded-full bg-violet-50 object-cover"
+        src={previewURL}
+        alt=""
+      />
+    )
   }
-
-  return (
-    <img
-      src={previewURL}
-      alt=""
-      className="h-16 w-16 rounded-full object-cover"
-    />
-  )
 }
